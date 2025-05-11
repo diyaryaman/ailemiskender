@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <!-- Web sitesinin duyarlı olmasını sağlamak için önemli -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restoran Web Sitesi</title>
+
+    <!-- Three.js Kütüphanesi -->
+    <script src="https://unpkg.com/three@0.157.0/build/three.min.js"></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <!-- CSS dosyamızı bağla -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <!-- Arka Plan Animasyon Scripti -->
+    <script src="js/background-animation.js"></script>
+
+    <!-- Navbar Bölümü Başlangıcı -->
+    <section class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="#" title="Logo">
+                    <img src="images/logo.png" alt="Restoran Logosu" class="img-responsive">
+                </a>
+            </div>
+
+            <div class="menu text-center">
+                <ul>
+                    <li>
+                        <a href="index.html">Anasayfa</a>
+                    </li>
+                    <li>
+                        <a href="hakkimizda.html">Hakkımızda</a>
+                    </li>
+                    <li>
+                        <a href="foods.html">Menü</a>
+                    </li>
+                    <li>
+                        <a href="contact.html">İletişim</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="clearfix"></div>
+        </div>
+    </section>
+    <!-- Navbar Bölümü Sonu -->
+
+    <!-- Yemek Menüsü Bölümü Başlangıcı -->
+    <section class="food-menu">
+        <div class="container">
+            <h2 class="text-center">Yemek Menüsü</h2>
+<!-- Alt Menü -->
+<div class="submenu-container">
+    <div class="container">
+        <button class="slide slide-left"><</button>
+        <nav class="submenu-nav">
+            <button class="submenu-item" data-category="Popüler">Popüler</button>
+            <button class="submenu-item" data-category="Çorbalar">Çorbalar</button>
+            <button class="submenu-item" data-category="Kebaplar & Izgaralar">Kebaplar & Izgaralar</button>
+            <button class="submenu-item" data-category="Fırın Ürünleri">Fırın Ürünleri</button>
+            <button class="submenu-item" data-category="Et Dönerler">Et Dönerler</button>
+            <button class="submenu-item" data-category="Tavuk Dönerler">Tavuk Dönerler</button>
+            <button class="submenu-item" data-category="Dürümler">Dürümler</button>
+            <button class="submenu-item" data-category="Diğer Lezzetler">Diğer Lezzetler</button>
+            <button class="submenu-item" data-category="İçecekler">İçecekler</button>
+            <button class="submenu-item" data-category="Tatlılar">Tatlılar</button>           
+        </nav>
+        <button class="slide slide-right">></button>
+    </div>
+</div>
+
+<!-- Dinamik İçerik Alanı -->
+<div class="dynamic-menu-content" id="menu-container"></div>
+            <div class="clearfix"></div>
+        </div>
+
+    </section>
+    <!-- Yemek Menüsü Bölümü Sonu -->
+
+    <!-- sosyal Bölüm Başlangıcı -->
+    <section class="social">
+        <div class="container text-center">
+            <ul>
+                <li>
+                    <a href="#"><img src="https://img.icons8.com/fluent/50/000000/facebook-new.png"/></a>
+                </li>
+                <li>
+                    <a href="#"><img src="https://img.icons8.com/fluent/48/000000/instagram-new.png"/></a>
+                </li>
+                <li>
+                    <a href="#"><img src="https://img.icons8.com/fluent/48/000000/twitter.png"/></a>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <!-- sosyal Bölüm Sonu -->
+
+    <!-- footer Bölümü Başlangıcı -->
+    <section class="footer">
+        <div class="container text-center">
+            <p>Tüm hakları saklıdır.</p>
+        </div>
+    </section>
+    <!-- footer Bölümü Sonu -->
+
+    <!-- JavaScript dosyalarını bağla -->
+    <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    // Firebase yapılandırması
+    const firebaseConfig = {
+        apiKey: "AIzaSyC4_AFNjGMfBg85bwxMjWWZU6_N4OnA1hU",
+        authDomain: "ailemiskender-599e1.firebaseapp.com",
+        databaseURL: "https://ailemiskender-599e1-default-rtdb.firebaseio.com",
+        projectId: "ailemiskender-599e1",
+        storageBucket: "ailemiskender-599e1.firebasestorage.app",
+        messagingSenderId: "7845160664",
+        appId: "1:7845160664:web:97e25fec701e13f204d9ad",
+        measurementId: "G-ZDDQZHXT0J"
+    };
+
+    // Firebase'i başlat
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // Anonim giriş yap
+    signInAnonymously(auth)
+        .then(() => {
+            console.log("Anonim giriş başarılı");
+        })
+        .catch((error) => {
+            console.error("Anonim giriş hatası:", error);
+        });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Submenu butonlarına tıklama event'i
+        const submenuButtons = document.querySelectorAll('.submenu-item');
+        submenuButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const kategori = this.getAttribute('data-category');
+                kategoriyeGoreUrunleriGoster(kategori);
+            });
+        });
+
+        // Sayfa ilk açıldığında Popüler kategorisi gösterilsin
+        kategoriyeGoreUrunleriGoster('Popüler');
+    });
+
+    async function kategoriyeGoreUrunleriGoster(kategori) {
+        const menuContainer = document.getElementById('menu-container');
+        
+        // Submenu butonlarını güncelle
+        document.querySelectorAll('.submenu-item').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-category') === kategori) {
+                btn.classList.add('active');
+            }
+        });
+
+        try {
+            // Kullanıcının giriş yapmasını bekle
+            await new Promise((resolve) => {
+                const unsubscribe = auth.onAuthStateChanged((user) => {
+                    if (user) {
+                        unsubscribe();
+                        resolve();
+                    }
+                });
+            });
+
+            // Firebase'den verileri çek
+            const menuRef = doc(db, "menu", kategori);
+            const docSnap = await getDoc(menuRef);
+
+            if (!docSnap.exists()) {
+                menuContainer.innerHTML = '<p style="text-align:center;">Bu kategoriye ait ürün bulunamadı.</p>';
+                return;
+            }
+
+            const items = docSnap.data().items;
+            menuContainer.innerHTML = '';
+            
+            items.forEach((item, i) => {
+                const box = document.createElement('div');
+                box.className = 'food-menu-box';
+                box.style.animationDelay = (i * 0.07) + 's';
+                box.innerHTML = `
+                    <div class="food-menu-img">
+                        <img src="images/${item.image}" alt="${item.name}" class="img-responsive img-curve">
+                    </div>
+                    <div class="food-menu-desc">
+                        <h4>${item.name}</h4>
+                        <p class="food-price">${item.price}</p>
+                        <p class="food-detail">${item.description}</p>
+                        <span class="food-calorie">${item.kalori ? item.kalori + ' (Tahminen)' : ''}</span>
+                    </div>
+                `;
+                menuContainer.appendChild(box);
+                
+                // Görünürlük animasyonunu doğrudan tetikle
+                box.classList.add('visible');
+            });
+        } catch (error) {
+            console.error("Veri çekme hatası:", error);
+            menuContainer.innerHTML = '<p style="text-align:center;">Ürünler yüklenirken bir hata oluştu.</p>';
+        }
+    }
+    </script>
+</body>
+</html>
